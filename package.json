@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "echarts": "^5.3.3",
-    "react-router": "^6.3.0"
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.9",
