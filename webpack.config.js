@@ -66,5 +66,8 @@ module.exports = {
     output: {               //打包文件出口
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js'
+    },
+    devServer: {
+        historyApiFallback: true,
     }
 }

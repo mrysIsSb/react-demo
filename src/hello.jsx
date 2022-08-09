@@ -13,4 +13,4 @@ class Hello extends React.Component {
     }
 }
 
-module.exports = Hello;
+export default Hello;
