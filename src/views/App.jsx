@@ -1,22 +1,33 @@
 import {
   HomeOutlined, MenuFoldOutlined,
-  MenuUnfoldOutlined
+  MenuUnfoldOutlined, UngroupOutlined,
+  ReadOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
-import { Outlet, useNavigate, useRoutes } from "react-router-dom";
-import Hello from '../Hello';
+import { Outlet, useNavigate } from "react-router-dom";
 
-import './App.css';
+import '../css/App.css';
 
-const { Header, Sider, Content, Footer } = Layout;
+const { Header, Sider, Content } = Layout;
 
-
-const rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
-
-
-
-
+const routes = [{
+  label: 'home',
+  path: 'home',
+  icon: <HomeOutlined />,
+}, {
+  label: 'demo',
+  path: '',
+  icon: <UngroupOutlined />,
+  children: [{
+    label: 'mqtt',
+    path: 'mqtt',
+  }]
+}, {
+  label: 'about',
+  path: 'about',
+  icon: <ReadOutlined />
+}];
 
 function createMenus(path, routes, onClick) {
   return routes.map((route) => {
@@ -25,27 +36,19 @@ function createMenus(path, routes, onClick) {
       icon: route.icon,
       label: route.label,
       onClick: route.children ? undefined : onClick(path, route),
-      children: route.children ? createMenus(path + '/' + route.label, route.children, onClick) : undefined,
+      children: route.children ? createMenus(path + (route.path.length > 0 ? '/' : '') + route.path, route.children, onClick) : undefined,
     };
   });
 }
 
-const App = ({ routes }) => {
+const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   let navigate = useNavigate();
 
-  // let r = createRoutes('', routes);
-  // console.log(r);
-  // let r1 = useRoutes(r);
-  // console.log(r1);
-
-
-
   const items = createMenus('', routes, (path, route) => {
     return (a) => {
-      console.log(a);
-      console.log('path', path + '/' + route.label);
-      navigate(path + '/' + route.label);
+      console.log(path, route);
+      navigate(path + '/' + route.path);
     }
   });
   return (
@@ -55,11 +58,13 @@ const App = ({ routes }) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['首页']}
+          defaultSelectedKeys={['home']}
           items={items}
         />
       </Sider>
-      <Layout className="site-layout">
+      <Layout className="site-layout" style={{
+        height: '100vh',
+      }}>
         <Header
           className="site-layout-background"
           style={{
@@ -74,43 +79,15 @@ const App = ({ routes }) => {
         <Content
           className="site-layout-background"
           style={{
-            margin: '24px 16px',
+            margin: '12px 8px',
             padding: 24,
             minHeight: 280,
           }}
         >
           <Outlet />
-          <Footer >footer</Footer>
         </Content>
       </Layout>
     </Layout>
   );
 };
-/* const App = () => {
-  const [openKeys, setOpenKeys] = useState(['sub1']);
-
-  const onOpenChange = (keys) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-
-    if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-      setOpenKeys(keys);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
-  };
-  const [collapsed, setCollapsed] = useState(false);
-  return (
-
-    <Menu
-      mode="inline"
-      openKeys={openKeys}
-      onOpenChange={onOpenChange}
-      style={{
-        width: 256,
-      }}
-      items={items}
-    />
-  );
-}; */
-
 export default App;

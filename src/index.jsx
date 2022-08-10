@@ -1,23 +1,17 @@
+import 'antd/dist/antd.css';
 import React from 'react';
 import { render } from 'react-dom';
-import 'antd/dist/antd.css';
 // import { Router } from 'react-router';
 import {
-  HomeOutlined, MenuFoldOutlined,
-  MenuUnfoldOutlined
-} from '@ant-design/icons';
-import {
-  BrowserRouter as Router,
+  BrowserRouter as Router, Route,
   // HashRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-  Link, useParams, Outlet, useRoutes
+  Routes, useRoutes
 } from "react-router-dom";
-import { routeConfig } from './routes'
 import NotFound from './common/NotFound';
-import App from './components/App';
-import Hello from './Hello';
+import App from './views/App';
+import Home from './views/Home';
+import MqttDemo from './views/MqttDemo';
+import About from './views/About';
 // import {BrowserRouter as Router, browserHistory} from 'react-router-dom'
 
 /* 
@@ -62,31 +56,9 @@ function Layout() {
     </div >
   );
 }
+ */
 
-render((
-  <Router >
-    <Routes>
-      <Route path="/" element={<App />}>
-        <Route path="*" element={<NotFound />} />
-      </Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </Router>
-), document.getElementsByTagName('body')[0]); */
 
-const routes = [{
-  label: 'home',
-  icon: <HomeOutlined />,
-  element: <Hello />,
-}, {
-  label: 'about',
-  icon: <HomeOutlined />,
-  children: [{
-    label: 'about1',
-    icon: <HomeOutlined />,
-    element: <Hello />,
-  }],
-}];
 function createRoutes(path, routes) {
   return routes.map((route) => {
     return {
@@ -104,8 +76,10 @@ function InitRoutes() {
 render((
   <Router>
     <Routes>
-      <Route path="/" element={<App routes={routes} />} >
-        <Route path="home" element={<Hello />} />
+      <Route path="/" element={<App />} >
+        <Route path="home" element={<Home />} />
+        <Route path="mqtt" element={<MqttDemo />} />
+        <Route path="about" element={<About />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

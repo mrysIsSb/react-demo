@@ -1,0 +1,24 @@
+.markdown table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.markdown table,
+th,
+td {
+  border: 1px solid #ccc;
+}
+
+.markdown pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  padding: 20px;
+  overflow: auto;
+  width: 100%;
+}
+
+.markdown code {
+  background-color: #ccc;
+  padding: 20px;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<header>
+  <title>mqtt</title>
+  <!-- <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script> -->
+  <script src="./js/mqtt.min.js"></script>
+</header>
+
+<body>
+  <div style="width: 100px; height:500px;">
+
+  </div>
+</body>
+<script>
+
+
+  const options = {
+    // Clean session
+    clean: true,
+    connectTimeout: 4000,
+    // Auth
+    clientId: 'access-token',
+    username: 'emqx_test',
+    password: 'emqx_test',
+    accessToken: 'access-token12341234123412334312',
+  }
+  const client = mqtt.connect('ws://localhost:8883/mqtt', options)
+  client.subscribe("mqtt.hello")
+
+  var i = 100;
+  client.on("message", function (topic, payload) {
+    console.log([topic, payload].join(": "));
+    // client.end()
+    i--
+    if (i < 0) {
+      client.unsubscribe("mqtt.hello");
+    }
+  })
+
+  client.publish("mqtt/demo", "hello world!")
+</script>
+
+</html>
