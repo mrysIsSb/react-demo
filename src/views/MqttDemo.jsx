@@ -2,7 +2,7 @@ import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import mqtt from '../js/mqtt.min.js';
 import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment, incrementByAmount } from '../redux/counterSlice'
+import { decrement, increment, incrementByAmount, counterSelector } from '../redux/counterSlice'
 import store from '@/redux/store';
 let ms = [];
 
@@ -29,10 +29,17 @@ const MqttDemo = (props) => {
   const unsubscribe = store.subscribe(handleChange)
 
 
-  const count = useSelector((state) => {
-    console.log(state);
-    return state.counter.value
-  })
+  // const count = useSelector((state) => {
+  //   console.log(state);
+  //   return state.counter.value
+  // })
+
+  const count = useSelector(counterSelector)
+  // const count = useSelector((state) => state, (a, b) => {
+  //   console.log(a, b);
+  //   return true;
+  // })
+  console.log("count", count)
   const dispatch = useDispatch()
   // dispatch(onChange(e => console.log(e)))
 
@@ -87,7 +94,7 @@ const MqttDemo = (props) => {
       <h1>
         hello mqtt
       </h1>
-      <h1>{count}</h1>
+      <h1>{count.value}</h1>
       <Button onClick={() => dispatch(increment())}>+1</Button>
       <Button onClick={() => dispatch(incrementByAmount(100))}>+100</Button>
       <Button onClick={() => dispatch(decrement())}>-1</Button>
