@@ -2,16 +2,18 @@ import 'antd/dist/antd.css';
 import React from 'react';
 import { render } from 'react-dom';
 // import { Router } from 'react-router';
+import store from '@/redux/store';
+import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router, Route,
   // HashRouter as Router,
   Routes, useRoutes
 } from "react-router-dom";
 import NotFound from './common/NotFound';
+import About from './views/About';
 import App from './views/App';
 import Home from './views/Home';
 import MqttDemo from './views/MqttDemo';
-import About from './views/About';
 // import {BrowserRouter as Router, browserHistory} from 'react-router-dom'
 
 /* 
@@ -74,16 +76,18 @@ function InitRoutes() {
 }
 
 render((
-  <Router>
-    <Routes>
-      <Route path="/" element={<App />} >
-        <Route path="home" element={<Home />} />
-        <Route path="mqtt" element={<MqttDemo />} />
-        <Route path="about" element={<About />} />
-      </Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </Router>
+  <Provider store={store}>
+    <Router>
+      <Routes>
+        <Route path="/" element={<App />} >
+          <Route path="home" element={<Home />} />
+          <Route path="mqtt" element={<MqttDemo />} />
+          <Route path="about" element={<About />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
+  </Provider>
 ), document.getElementsByTagName('body')[0]);
 
 

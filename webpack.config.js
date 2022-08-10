@@ -54,7 +54,8 @@ module.exports = {
   resolve: {
     alias: {
       'react': pathToReact,
-      'react-dom': pathToReactDom
+      'react-dom': pathToReactDom,
+      '@': path.resolve(__dirname, 'src')
     },
     extensions: ['', '.js', '.jsx'], //后缀名自动补全
   },

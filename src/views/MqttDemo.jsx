@@ -1,29 +1,47 @@
+import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import mqtt from '../js/mqtt.min.js';
-
+import { useSelector, useDispatch } from 'react-redux'
+import { decrement, increment, incrementByAmount } from '../redux/counterSlice'
+import store from '@/redux/store';
 let ms = [];
 
 const MsgBox = ({ msgs }) => {
   return msgs.map((msg, index) => {
     return (
-      <p key={index}>
+      <div key={index}>
         {msg}
-      </p>
+      </div>
     )
   });
 }
 
-
 const MqttDemo = (props) => {
-  console.log("a", ms)
   const [client, setClient] = useState(null);
-  const [msgs, setMsgs] = useState(ms);
+  const [msgs, setMsgs] = useState([]);
+
+  //redux
+
+  function handleChange() {
+    console.log("handleChange", store.getState())
+  }
+
+  const unsubscribe = store.subscribe(handleChange)
+
+
+  const count = useSelector((state) => {
+    console.log(state);
+    return state.counter.value
+  })
+  const dispatch = useDispatch()
+  // dispatch(onChange(e => console.log(e)))
+
+
+  useEffect(() => () => unsubscribe())
   // console.log('MqttDemo');
   useEffect(() => {
     return () => {
-      console.log(msgs)
       ms = msgs;
-      console.log("b", ms)
     }
   }, [msgs]);
   useEffect(() => {
@@ -39,7 +57,7 @@ const MqttDemo = (props) => {
       client.subscribe("mqtt.hello");
       var i = 100;
       client.on('message', function (topic, message) {
-        setMsgs([...msgs, [topic, message].join(": ")]);
+        setMsgs(msgs => [...msgs, [topic, message].join(": ")]);
         // msgs = [...msgs, [topic, message].join(": ")];
         console.log('msgs', msgs);
         i--
@@ -62,13 +80,18 @@ const MqttDemo = (props) => {
       password: 'emqx_test',
       accessToken: 'access-token12341234123412334312',
     }
-    setClient(mqtt.connect('ws://localhost:8883/mqtt', options));
+    // setClient(mqtt.connect('ws://localhost:8883/mqtt', options));
   }
   return (
     <span>
       <h1>
         hello mqtt
       </h1>
+      <h1>{count}</h1>
+      <Button onClick={() => dispatch(increment())}>+1</Button>
+      <Button onClick={() => dispatch(incrementByAmount(100))}>+100</Button>
+      <Button onClick={() => dispatch(decrement())}>-1</Button>
+      <Button onClick={() => setMsgs(e => [...e, "hello"])} > 消息 </Button>
       <MsgBox msgs={msgs} />
       <div id='main' style={
         {
