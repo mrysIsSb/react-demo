@@ -1,13 +1,20 @@
 import {
   HomeOutlined, MenuFoldOutlined,
   MenuUnfoldOutlined, UngroupOutlined,
-  ReadOutlined,
+  ReadOutlined, BellOutlined
 } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Badge } from 'antd';
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
 
+import mqtt from '../js/mqttClient';
+
 import '../css/App.css';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { mqttSelector } from '../redux/mqttSlice';
+
+
 
 const { Header, Sider, Content } = Layout;
 
@@ -51,6 +58,21 @@ const App = () => {
       navigate(path + '/' + route.path);
     }
   });
+  //mqtt
+  const options = {
+    // Clean session
+    clean: true,
+    connectTimeout: 4000,
+    // Auth
+    clientId: 'access-token',
+    username: 'emqx_test',
+    password: 'emqx_test',
+    accessToken: 'access-token12341234123412334312',
+  }
+  mqtt.connect('ws://localhost:8883/mqtt', options);
+  mqtt.subscribe('mqtt.hello');
+
+  const count = useSelector(mqttSelector).msgs.length;
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -75,6 +97,21 @@ const App = () => {
             className: 'trigger',
             onClick: () => setCollapsed(!collapsed),
           })}
+          <span onClick={
+            () => navigate('/mqtt')
+          } style={{
+            float: 'right',
+            lineHeight: 'inherit',
+            marginRight: '32px',
+          }}>
+            <Badge count={count} size='small'>
+              <BellOutlined style={
+                {
+                  fontSize: '20px',
+                }
+              } />
+            </Badge>
+          </span>
         </Header>
         <Content
           className="site-layout-background"
