@@ -1,12 +1,17 @@
 import store from '@/redux/store';
-import { changeMsg } from '../redux/mqttSlice';
+import { changeMsg,changeConnect } from '../redux/mqttSlice';
 import mqtt from './mqtt.min.js';
 
 let client = null;
 
 export const connect = (url, options) => {
   if (!client) {
-    client = mqtt.connect(url, options);
+    try {
+      client = mqtt.connect(url, options);
+      changeConnect(true);
+    } catch (e) {
+      changeConnect(false);
+    }
     client.on('message', (topic, message) => {
       store.dispatch(changeMsg({
         dateTime: new Date().toLocaleString(),
@@ -39,6 +44,7 @@ export const end = () => {
   if (client) {
     client.end(() => {
       client = null;
+      changeConnect(false);
     });
   }
 }

@@ -1,7 +1,8 @@
 import {
   HomeOutlined, MenuFoldOutlined,
   MenuUnfoldOutlined, UngroupOutlined,
-  ReadOutlined, BellOutlined
+  ReadOutlined, BellOutlined,
+  DisconnectOutlined, LinkOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Badge } from 'antd';
 import React, { useState } from 'react';
@@ -69,10 +70,12 @@ const App = () => {
     password: 'emqx_test',
     accessToken: 'access-token12341234123412334312',
   }
-  mqtt.connect('ws://localhost:8883/mqtt', options);
-  mqtt.subscribe('mqtt.hello');
+    mqtt.connect('ws://localhost:8883/mqtt', options);
+    mqtt.subscribe('mqtt.hello');
 
-  const count = useSelector(mqttSelector).msgs.length;
+    let mqttState=useSelector(mqttSelector);
+  const count = mqttState.msgs.length;
+  const mqttConnect=mqttState.connected;
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -91,26 +94,48 @@ const App = () => {
           className="site-layout-background"
           style={{
             padding: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
             className: 'trigger',
             onClick: () => setCollapsed(!collapsed),
           })}
-          <span onClick={
-            () => navigate('/mqtt')
-          } style={{
-            float: 'right',
-            lineHeight: 'inherit',
-            marginRight: '32px',
-          }}>
-            <Badge count={count} size='small'>
-              <BellOutlined style={
-                {
+          <span>
+            <span style={{
+              marginRight: '10px',
+            }} onClick={
+              () => navigate('/mqtt')
+            }>
+              <Badge count={count} size='small'>
+                <BellOutlined style={{
                   fontSize: '20px',
-                }
-              } />
-            </Badge>
+                }} />
+              </Badge>
+            </span>
+            <span style={{
+              marginRight: '20px',
+            }}>
+              {
+                (() => {
+                  if (mqttConnect) {
+                    return (<LinkOutlined style={{
+                      fontSize: '20px',
+                      // color: '#00ff00',
+                      WebkitAnimation: 'green-move 5s infinite',
+                    }} />)
+                  } else {
+                    return (<DisconnectOutlined style={{
+                      fontSize: '20px',
+                      color: '#ff0000',
+                      WebkitAnimation: 'red-move 3s infinite',
+                    }} />)
+                  }
+                })()
+              }
+            </span>
           </span>
         </Header>
         <Content
@@ -119,6 +144,7 @@ const App = () => {
             margin: '12px 8px',
             padding: 24,
             minHeight: 280,
+            display: 'flex',
           }}
         >
           <Outlet />

@@ -19,3 +19,87 @@
 .site-layout .site-layout-background {
   background: #fff;
 }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+/* 对齐内容 */
+.flex-content-start {
+  justify-content: flex-start;
+}
+
+.flex-content-end {
+  justify-content: flex-end;
+}
+
+.flex-content-center {
+  justify-content: center;
+}
+
+/* 对齐 */
+.flex-align-start {
+  align-items: flex-start;
+}
+
+.flex-align-end {
+  align-items: flex-end;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes green-move {
+  0% {
+    color: #d0ffd0;
+  }
+
+  50% {
+    color: #00ff00;
+  }
+
+  100% {
+    color: #d0ffd0;
+  }
+}
+
+/* Standard syntax */
+@keyframes green-move {
+  0% {
+    color: #d0ffd0;
+  }
+
+  50% {
+    color: #00ff00;
+  }
+
+  100% {
+    color: #d0ffd0;
+  }
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes red-move {
+  50% {
+    color: #ffd0d0;
+  }
+}
+
+/* Standard syntax */
+@keyframes red-move {
+  50% {
+    color: #ffd0d0;
+  }
+}

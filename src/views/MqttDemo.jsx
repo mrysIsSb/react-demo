@@ -8,7 +8,7 @@ import { counterSelector, decrement, increment, incrementByAmount } from '../red
 import { clearMsg, mqttSelector } from '../redux/mqttSlice';
 
 
-const MsgBox = ({ msgs, autoScroll }) => {
+const MsgBox = ({ msgs, autoScroll, style }) => {
   useEffect(() => {
     if (autoScroll) {
       let dom = document.getElementById('msgBox');
@@ -17,11 +17,11 @@ const MsgBox = ({ msgs, autoScroll }) => {
   })
   return (
     <div id='msgBox' style={{
+      ...style,
       width: "100%",
-      height: "70vh",
       overflow: "auto",
       border: "1px solid #cc1",
-      backgroundColor: "#ccc",
+      backgroundColor: "darkgrey",
     }}>
       {
         msgs.map((msg, index) => {
@@ -37,7 +37,7 @@ const MsgBox = ({ msgs, autoScroll }) => {
   )
 }
 
-const MqttChart = ({ fromEvent, msgs }) => {
+const MqttChart = ({ fromEvent, msgs, style }) => {
   const [chart, setChart] = useState(null);
   useEffect(() => {
     if (!chart) {
@@ -136,8 +136,10 @@ const MqttChart = ({ fromEvent, msgs }) => {
   }, [chart]);
 
   return (
-    <span>
-      <div id='main' style={{ width: "100%", height: "80vh", }}></div>
+    <span style={{
+      ...style,
+    }}>
+      <div id='main' style={{ width: "100%", height: "100%", }}></div>
     </span>
   )
 }
@@ -175,37 +177,61 @@ const MqttDemo = (props) => {
   const dispatch = useDispatch()
   // dispatch(onChange(e => console.log(e)))
   return (
-    <span>
-      <h1>{menu}</h1>
+    <span style={{
+      flex: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
       <Radio.Group value={menu}>
         <Radio.Button value="msgBox" onClick={(e) => { setMenu(e.target.value) }}>消息</Radio.Button>
         <Radio.Button value="chart" onClick={(e) => { setMenu(e.target.value) }}>chart</Radio.Button>
       </Radio.Group>
+      {/* <div style={{
+        flex: 'auto',
+      }}> */}
       {
         (() => {
           if (menu === 'msgBox') {
             return (
-              <span>
-                <Button onClick={() => dispatch(clearMsg())} > 清空 </Button>
-                <Checkbox checked={autoScroll} onChange={(e) => {
-                  setAutoScroll(e.target.checked);
-                }}>自动滚动</Checkbox>
+              <span style={{
+                flex: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+              }}>
+                <span style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                  <Button onClick={() => dispatch(clearMsg())}> 清空 </Button>
+                  <Checkbox checked={autoScroll} onChange={(e) => {
+                    setAutoScroll(e.target.checked);
+                  }} style={{
+                  }}>自动滚动</Checkbox>
+                </span>
                 <MsgBox msgs={msgs.map((e, i) => {
                   let { dateTime, topic, message } = e;
                   return ['[' + dateTime + '] ' + topic, message].join(": ")
-                })} autoScroll={autoScroll} />
+                })} autoScroll={autoScroll} style={{
+                  flex: 'auto',
+                }} />
               </span>
             )
           } else if (menu === 'chart') {
             return (
-              <MqttChart fromEvent={fromEvent} msgs={msgs.map((e, i) => e.message)} />
+              <MqttChart fromEvent={fromEvent} msgs={msgs.map((e, i) => e.message)} style={{
+                flex: 'auto',
+              }} />
             )
           }
           return (<span>未知</span>)
         })()
       }
+      {/* </div> */}
 
-    </span>
+
+    </span >
   );
 }
 

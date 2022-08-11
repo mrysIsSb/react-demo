@@ -7,6 +7,7 @@ export const mqttSlice = createSlice({
     msgs: [],
     toEvent: [],
     fromEvent: [],
+    connected: false,
   },
   reducers: {
     changeMsg: (state, action) => {
@@ -18,12 +19,15 @@ export const mqttSlice = createSlice({
     clearMsg: (state) => {
       state.msgs = [];
       state.toEvent = [];
+    },
+    changeConnect: (state, action) => {
+      state.connected = action.payload;
     }
   },
 })
 
 export const mqttSelector = createSelector((state) => state['mqtt'], (state) => state)
 
-export const { changeMsg, clearMsg } = mqttSlice.actions
+export const { changeMsg, clearMsg, changeConnect } = mqttSlice.actions
 
 export default mqttSlice.reducer
