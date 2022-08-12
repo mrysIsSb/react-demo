@@ -197,6 +197,7 @@ const MqttDemo = (props) => {
                 flex: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
+                overflow: "auto",
               }}>
                 <span style={{
                   display: 'flex',

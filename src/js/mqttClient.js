@@ -1,22 +1,24 @@
 import store from '@/redux/store';
-import { changeMsg,changeConnect } from '../redux/mqttSlice';
+import { changeMsg, changeConnect } from '../redux/mqttSlice';
 import mqtt from './mqtt.min.js';
 
 let client = null;
 
 export const connect = (url, options) => {
   if (!client) {
-    try {
-      client = mqtt.connect(url, options);
-      changeConnect(true);
-    } catch (e) {
-      changeConnect(false);
-    }
+    client = mqtt.connect(url, options);
+
     client.on('message', (topic, message) => {
       store.dispatch(changeMsg({
         dateTime: new Date().toLocaleString(),
         topic, message: message.toString(),
       }));
+    });
+    client.on('connect', () => {
+      dispatchChangeConnect(true);
+    });
+    client.on('close', () => {
+      dispatchChangeConnect(false);
     });
   }
   return client;
@@ -44,9 +46,13 @@ export const end = () => {
   if (client) {
     client.end(() => {
       client = null;
-      changeConnect(false);
+      dispatchChangeConnect(false);
     });
   }
+}
+
+const dispatchChangeConnect = (connected) => {
+  store.dispatch(changeConnect(connected));
 }
 
 export default {

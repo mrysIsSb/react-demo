@@ -75,7 +75,8 @@ const App = () => {
 
     let mqttState=useSelector(mqttSelector);
   const count = mqttState.msgs.length;
-  const mqttConnect=mqttState.connected;
+  const mqttConnect = mqttState.connected;
+  console.log(mqttConnect);
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>

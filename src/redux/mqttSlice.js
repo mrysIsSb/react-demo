@@ -21,6 +21,7 @@ export const mqttSlice = createSlice({
       state.toEvent = [];
     },
     changeConnect: (state, action) => {
+      console.log('changeConnect', action.payload);
       state.connected = action.payload;
     }
   },
