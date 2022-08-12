@@ -37,7 +37,7 @@ const MsgBox = ({ msgs, autoScroll, style }) => {
   )
 }
 
-const MqttChart = ({ fromEvent, msgs, style }) => {
+const MqttChart = ({ fromTopic, msgs, style }) => {
   const [chart, setChart] = useState(null);
   useEffect(() => {
     if (!chart) {
@@ -55,10 +55,10 @@ const MqttChart = ({ fromEvent, msgs, style }) => {
           category: 0
         }
       ];
-      const legendData = ['client', 'event', 'msg'];
+      const legendData = ['client', 'topic', 'msg'];
       const edges = [];
-      if (fromEvent) {
-        fromEvent.forEach(e => {
+      if (fromTopic) {
+        fromTopic.forEach(e => {
           data.push({
             symbolSize: 40,
             id: e,
@@ -171,7 +171,7 @@ const MqttDemo = (props) => {
 
   const mqttState = useSelector(mqttSelector);
   const msgs = mqttState.msgs
-  const fromEvent = mqttState.fromEvent
+  const fromTopic = mqttState.fromTopic
 
 
   const dispatch = useDispatch()
@@ -186,9 +186,6 @@ const MqttDemo = (props) => {
         <Radio.Button value="msgBox" onClick={(e) => { setMenu(e.target.value) }}>消息</Radio.Button>
         <Radio.Button value="chart" onClick={(e) => { setMenu(e.target.value) }}>chart</Radio.Button>
       </Radio.Group>
-      {/* <div style={{
-        flex: 'auto',
-      }}> */}
       {
         (() => {
           if (menu === 'msgBox') {
@@ -221,7 +218,7 @@ const MqttDemo = (props) => {
             )
           } else if (menu === 'chart') {
             return (
-              <MqttChart fromEvent={fromEvent} msgs={msgs.map((e, i) => e.message)} style={{
+              <MqttChart fromTopic={fromTopic} msgs={msgs.map((e, i) => e.message)} style={{
                 flex: 'auto',
               }} />
             )

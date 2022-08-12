@@ -5,8 +5,8 @@ export const mqttSlice = createSlice({
   initialState: {
     latestMsg: '',
     msgs: [],
-    toEvent: [],
-    fromEvent: [],
+    toTopic: [],
+    fromTopic: [],
     connected: false,
   },
   reducers: {
@@ -14,11 +14,11 @@ export const mqttSlice = createSlice({
       let { dateTime, topic, message } = action.payload
       state.latestMsg = action.payload;
       state.msgs.push(action.payload);
-      state.fromEvent = state.fromEvent.indexOf(topic) === -1 ? [...state.fromEvent, topic] : state.fromEvent;
+      state.fromTopic = state.fromTopic.indexOf(topic) === -1 ? [...state.fromTopic, topic] : state.fromTopic;
     },
     clearMsg: (state) => {
       state.msgs = [];
-      state.toEvent = [];
+      state.toTopic = [];
     },
     changeConnect: (state, action) => {
       console.log('changeConnect', action.payload);
