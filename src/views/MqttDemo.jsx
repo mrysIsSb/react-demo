@@ -20,6 +20,7 @@ const MsgBox = ({ msgs, autoScroll, style }) => {
       ...style,
       width: "100%",
       overflow: "auto",
+      scrollBehavior: "smooth",
       border: "1px solid #cc1",
       backgroundColor: "darkgrey",
     }}>
