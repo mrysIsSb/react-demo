@@ -70,13 +70,12 @@ const App = () => {
     password: 'emqx_test',
     accessToken: 'access-token12341234123412334312',
   }
-    mqtt.connect('ws://localhost:8883/mqtt', options);
-    mqtt.subscribe('mqtt.hello');
+  mqtt.connect('ws://localhost:8883/mqtt', options);
+  mqtt.subscribe('mqtt.hello');
 
-    let mqttState=useSelector(mqttSelector);
+  let mqttState = useSelector(mqttSelector);
   const count = mqttState.msgs.length;
   const mqttConnect = mqttState.connected;
-  console.log(mqttConnect);
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>

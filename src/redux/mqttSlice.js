@@ -1,4 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit'
+import store from '@/redux/store';
 
 export const mqttSlice = createSlice({
   name: 'mqtt',
@@ -21,14 +22,29 @@ export const mqttSlice = createSlice({
       state.toTopic = [];
     },
     changeConnect: (state, action) => {
-      console.log('changeConnect', action.payload);
       state.connected = action.payload;
     }
   },
 })
 
+export const mqttMsgSlice = createSlice({
+  name: 'mqtt.msg',
+  initialState: {
+    msg: {},
+  },
+  reducers: {
+    receivedMsg: (state, action) => {
+      state.msg = action.payload;
+    }
+  }
+})
+
 export const mqttSelector = createSelector((state) => state['mqtt'], (state) => state)
+export const mqttMsgSelector = createSelector((state) => state['mqtt.msg'], (state) => state)
 
 export const { changeMsg, clearMsg, changeConnect } = mqttSlice.actions
+export const { receivedMsg } = mqttMsgSlice.actions
+
+export const mqttMsgReducer = mqttMsgSlice.reducer
 
 export default mqttSlice.reducer
